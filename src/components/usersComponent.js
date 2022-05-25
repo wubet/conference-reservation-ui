@@ -5,7 +5,6 @@ import { ArrowUpward } from "@material-ui/icons";
 import React from "react";
 import * as colors from "@material-ui/core/colors";
 import { createMuiTheme , ThemeProvider } from "@material-ui/core/styles";
-import { alpha } from '@material-ui/core/styles'
 
 export default function UsersComponent() {
   const theme = createMuiTheme ({
@@ -58,7 +57,7 @@ export default function UsersComponent() {
           }}
           data={(query) =>
             new Promise((resolve, reject) => {
-              let url = "http://localhost:5000/api/v1/users?";
+              let url = "http://conferencereservation-env-2.eba-pjmr2epd.us-west-2.elasticbeanstalk.com/api/v1/users?";
               url += "pageSize=" + query.pageSize;
               url += "&page=" + (query.page);
               console.debug(`request url: ${url}`);

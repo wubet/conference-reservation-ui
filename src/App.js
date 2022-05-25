@@ -19,10 +19,9 @@ import { parseISO, parse, format } from 'date-fns';
 import Select from 'react-select';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { listRooms} from "./api/rooms";
-import { listUsers, postUser } from "./api/users";
+import { listUsers, postUser, getUserByUserName, putUser } from "./api/users";
 import { postReservation, listReservationByRoomsId } from "./api/reservations";
 import { Amplify, Auth, Hub, Logger } from 'aws-amplify';
-import { Authenticator } from '@aws-amplify/ui-react';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import awsExports from './aws-exports';
 import Nav from './components/Nav'
@@ -55,6 +54,7 @@ class App extends React.Component {
         case 'signIn':
           logger.info('user signed in');
           this.getCurrentUser(data);
+          this.setCurrentUser(data);
           break;
         case 'signUp':
           logger.info('user signed up');
@@ -135,11 +135,31 @@ class App extends React.Component {
     );
   } 
 
+  updateCurrentUser = async (registoredUser) => {
+    try{
+      const userId = registoredUser.user_id;
+      const newUser = await putUser(userId, registoredUser);
+    }catch(err){
+      console.log("unaple to push registore user data", err)
+     
+    }   
+  }
+
   setCurrentUser = async (data) => {
     if(data){
         try{
-           let user = Auth.currentAuthenticatedUser();
-         
+           let user_name = data.payload.data.username;
+           let registoredUser = await getUserByUserName(user_name);
+           let userId;
+           if(registoredUser){
+             registoredUser.firstName = data.payload.data.attributes.given_name
+             registoredUser.lastName = data.payload.data.attributes.family_name
+             registoredUser.emailId = data.payload.data.attributes.email
+             registoredUser.phoneNumber = data.payload.data.attributes.phone_number
+             registoredUser.reservations = null;
+           }
+        const user =  await this.updateCurrentUser(registoredUser);
+
         } catch(err){
           console.log(err);
         }        

@@ -31,8 +31,8 @@ export const CUSTOM_DATA = [
     
     // Should provide options with type:"select"
     options: [
-      { id: 1, text: "Wube", value: 1 },
-      { id: 2, text: "Elzabet", value: 2 }
+      { id: 1, text: "Wube ", value: 1 },
+      { id: 2, text: "Elzabet ", value: 2 }
     ],
     // options: opt
     config: { label: "User", required: true, errMsg: "Plz Select User" }

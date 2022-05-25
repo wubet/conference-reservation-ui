@@ -8,7 +8,7 @@ import { alpha } from '@material-ui/core/styles'
 import { createMuiTheme , ThemeProvider } from "@material-ui/core/styles";
 import _ from "lodash";
 
-const GET_USERS_URL = 'http://localhost:5000/api/v1/rooms?'
+const GET_USERS_URL = 'http://conferencereservation-env-2.eba-pjmr2epd.us-west-2.elasticbeanstalk.com/api/v1/rooms?'
 
 export class RoomsComponent extends Component {
 
@@ -24,7 +24,7 @@ export class RoomsComponent extends Component {
         data: []
       };
    render(){
-    const GET_USERS_URL = 'http://localhost:5000/api/v1/rooms?'
+    const GET_USERS_URL = 'http://conferencereservation-env-2.eba-pjmr2epd.us-west-2.elasticbeanstalk.com/api/v1/rooms?'
     const theme = createMuiTheme ({
       overrides: {
         MuiTableSortLabel: {
@@ -69,7 +69,7 @@ export class RoomsComponent extends Component {
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify(newData)
                 };
-                let url = `http://localhost:5000/api/v1/rooms`;
+                let url = `http://conferencereservation-env-2.eba-pjmr2epd.us-west-2.elasticbeanstalk.com/api/v1/rooms`;
                 console.debug(`request url: ${url}`);
   
                 fetch(url, requestOptions)
@@ -99,7 +99,7 @@ export class RoomsComponent extends Component {
                 body: JSON.stringify(newData)
               };
               let roomId = newData.room_id;
-              let url = `http://localhost:5000/api/v1/rooms/${roomId}`;
+              let url = `http://conferencereservation-env-2.eba-pjmr2epd.us-west-2.elasticbeanstalk.com/api/v1/rooms/${roomId}`;
               console.debug(`request url: ${url}`);
 
               fetch(url, requestOptions)
@@ -125,7 +125,7 @@ export class RoomsComponent extends Component {
                   headers: { 'Content-Type': 'application/json' },
                 };
                 let roomId = oldData.room_id;
-                let url = `http://localhost:5000/api/v1/rooms/${roomId}`;
+                let url = `http://conferencereservation-env-2.eba-pjmr2epd.us-west-2.elasticbeanstalk.com/api/v1/rooms/${roomId}`;
                 console.debug(`request url: ${url}`);
   
                 fetch(url, requestOptions)

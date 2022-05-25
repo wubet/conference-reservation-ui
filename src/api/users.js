@@ -21,3 +21,16 @@ export function postUser(data) {
       console.error('There was an error to post user data!', error);
   });
 }
+
+export function getUserByUserName(username) {
+  return axiosConn.get(`/api/v1/users/check/${username}`).then(res => res.data)
+}
+
+export function putUser(id, body) {
+ 
+  return axiosConn.put(`/api/v1/users/${id}`, body)
+  .then(res => res.data)
+  .catch(error => {
+      console.error('There was an error to put user data!', error);
+  });
+}
