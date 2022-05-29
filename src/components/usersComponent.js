@@ -57,7 +57,7 @@ export default function UsersComponent() {
           }}
           data={(query) =>
             new Promise((resolve, reject) => {
-              let url = "http://conferencereservation.us-west-2.elasticbeanstalk.com/api/v1/users?";
+              let url = "https://conferencereservation.us-west-2.elasticbeanstalk.com/api/v1/users?";
               url += "pageSize=" + query.pageSize;
               url += "&page=" + (query.page);
               console.debug(`request url: ${url}`);
