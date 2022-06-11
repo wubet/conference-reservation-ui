@@ -26,7 +26,7 @@ if(localStorage.token){
 
 // Create an axios instance
 const axiosConn = axios.create({
-  baseURL:'https://conferencereservation.us-west-2.elasticbeanstalk.com/',
+  baseURL:'http://localhost:5000/',
   withCredentials: false,
   headers
 })

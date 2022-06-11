@@ -8,7 +8,7 @@ import { alpha } from '@material-ui/core/styles'
 import { createMuiTheme , ThemeProvider } from "@material-ui/core/styles";
 import _ from "lodash";
 
-const GET_USERS_URL = 'https://conferencereservation.us-west-2.elasticbeanstalk.com/api/v1/rooms?'
+const GET_USERS_URL = 'http://localhost:5000/api/v1/rooms?'
 
 export class RoomsComponent extends Component {
 
@@ -24,7 +24,7 @@ export class RoomsComponent extends Component {
         data: []
       };
    render(){
-    const GET_USERS_URL = 'https://conferencereservation.us-west-2.elasticbeanstalk.com/api/v1/rooms?'
+    const GET_USERS_URL = 'http://localhost:5000/api/v1/rooms?'
     const theme = createMuiTheme ({
       overrides: {
         MuiTableSortLabel: {
@@ -61,15 +61,15 @@ export class RoomsComponent extends Component {
         editable={{
           onRowAdd: newData =>
             new Promise((resolve, reject) => {
-                newData.updateDateTime = new Date(); 
-                newData.createDateTime = new Date();
+                // newData.updateDateTime = new Date(); 
+                // newData.createDateTime = new Date();
                 let newRoom =[]
                 const requestOptions = {               
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify(newData)
                 };
-                let url = `https://conferencereservation.us-west-2.elasticbeanstalk.com/api/v1/rooms`;
+                let url = `http://localhost:5000/api/v1/rooms`;
                 console.debug(`request url: ${url}`);
   
                 fetch(url, requestOptions)
@@ -90,8 +90,6 @@ export class RoomsComponent extends Component {
             }),
           onRowUpdate: (newData, oldData) =>         
             new Promise((resolve, reject) => {
-              newData.updateDateTime = new Date(); 
-              newData.reservations = null;
               let newRoom =[]
               const requestOptions = {               
                 method: 'PUT',
@@ -99,7 +97,7 @@ export class RoomsComponent extends Component {
                 body: JSON.stringify(newData)
               };
               let roomId = newData.room_id;
-              let url = `https://conferencereservation.us-west-2.elasticbeanstalk.com/api/v1/rooms/${roomId}`;
+              let url = `http://localhost:5000/api/v1/rooms/${roomId}`;
               console.debug(`request url: ${url}`);
 
               fetch(url, requestOptions)
@@ -118,14 +116,12 @@ export class RoomsComponent extends Component {
             }),
           onRowDelete: oldData =>
             new Promise((resolve, reject) => {
-                oldData.updateDateTime = new Date(); 
-                oldData.createDateTime = new Date(); 
                 const requestOptions = {               
                   method: 'DELETE',
                   headers: { 'Content-Type': 'application/json' },
                 };
                 let roomId = oldData.room_id;
-                let url = `https://conferencereservation.us-west-2.elasticbeanstalk.com/api/v1/rooms/${roomId}`;
+                let url = `http://localhost:5000/api/v1/rooms/${roomId}`;
                 console.debug(`request url: ${url}`);
   
                 fetch(url, requestOptions)

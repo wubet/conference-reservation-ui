@@ -20,7 +20,7 @@ import Select from 'react-select';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { listRooms} from "./api/rooms";
 import { listUsers, postUser, getUserByUserName, putUser } from "./api/users";
-import { postReservation, listReservationByRoomsId } from "./api/reservations";
+import { postReservation, listReservationByRoomsId, updateReservation, deleteReservations } from "./api/reservations";
 import { Amplify, Auth, Hub, Logger } from 'aws-amplify';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import awsExports from './aws-exports';
@@ -212,6 +212,36 @@ class App extends React.Component {
       alert("Please select room for the booking", err)
     }   
   }
+
+  editReservations = async (event) =>{
+    var roomId = null;
+    try{
+      const oldEvent = this.state.events.find(e => e.event_id === event.event_id);
+      const reservation_id = oldEvent.reservation_id;
+      const updatedReservation = await updateReservation(reservation_id, oldEvent, event);
+      this.setState(prevState => {
+        const currentEvents = [...prevState.events];
+        const index = currentEvents.findIndex(e => e.event_id === event.event_id);  
+        currentEvents[index] = event;  
+        return { currentEvents };
+      });
+    }catch(err){
+      console.log( err)
+    }   
+  }
+
+  deleteReservations = async (deletedId) =>{
+    try{
+      const oldEvent = this.state.events.find(e => e.event_id === deletedId);
+      const reservation_id = oldEvent.reservation_id;
+      const newReservation = await deleteReservations(reservation_id);
+      const oldEvents = [...this.state.events];
+      this.setState({ events: oldEvents.filter((event) => event.event_id !== deletedId) });
+
+    }catch(err){
+      console.log(err)
+    }   
+  }
   
   fetchRemote = async (query, isRoomSelected) => {
     console.log("Query: ", query);
@@ -227,9 +257,12 @@ class App extends React.Component {
         reservation =  await listReservationByRoomsId(roomId, start, end);
         events = reservation.map((r) => {
           return {
-
-            event_id: r.event_id ?? (new Date()).getTime(),
+            event_id: r.event_id,
+            reservation_id:r.reservation_id,
             title: r.title,
+            status: r.status,
+            room_id: r.room.room_id,
+            user_id: r.user.user_id,
             start: parseISO(r.start, "YYYY MM DD HH:MM"),
             end: parseISO(r.end, "YYYY MM DD HH:MM")
           }
@@ -241,12 +274,14 @@ class App extends React.Component {
 
     }catch(err){
       console.log("error feaching data", err)
+      this.setState({ events: undefined });
     }
   }; 
 
   handleConfirm = async (event, action) => {
     console.log(event, action);
     if (action === "edit") {
+      this.editReservations(event)
      
     } else if (action === "create") {
       
@@ -254,16 +289,15 @@ class App extends React.Component {
     }
 
     return new Promise((res, rej) => {
-      setTimeout(() => {
         res({
           ...event,
-          event_id: event.event_id || Math.random()
+          event_id: event.event_id
         });
-      }, 1000);
     });
   };
 
   handleDelete = async (deletedId) => {
+    this.deleteReservations(deletedId)
     return new Promise((res, rej) => {
       setTimeout(() => {
         res(deletedId);
